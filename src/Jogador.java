@@ -8,29 +8,19 @@ public class Jogador {
 	public Jogador(){
 		tabuleiro = new Tabuleiro();
 	}
-	/*
-	void jogada(){	  
+
+	void fazerJogada(){	  
 		  inputJogada = new Scanner(System.in);
+		  
 		  System.out.print("Digite o numero da linha:");	  
 		  String linhaString = inputJogada.nextLine();
 		  int linha = Integer.parseInt(linhaString);
+		  
 		  System.out.print("Digite o numero da coluna:");
 		  String colunaString = inputJogada.nextLine();
 		  int coluna = Integer.parseInt(colunaString);
 		  
-		  tabuleiro.marcaJogadaX(linha, coluna); 
-	  }
-	  */
-	void jogada(){	  
-		  inputJogada = new Scanner(System.in);
-		  System.out.print("Digite o numero da linha:");	  
-		  String linhaString = inputJogada.nextLine();
-		  int linha = Integer.parseInt(linhaString);
-		  System.out.print("Digite o numero da coluna:");
-		  String colunaString = inputJogada.nextLine();
-		  int coluna = Integer.parseInt(colunaString);
-		  
-		  tabuleiro.set(linha, coluna, 'x'); 
+		  tabuleiro.inserePeca(linha, coluna, 'x'); 
 	  }
 	
 }
