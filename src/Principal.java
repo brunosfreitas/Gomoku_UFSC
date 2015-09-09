@@ -17,10 +17,10 @@ public class Principal {
 		Jogador jogador = new Jogador();
 		IA ia = new IA();
 		jogador.fazerJogada();
-		jogador.tabuleiro.printTabuleiro();
+		jogador.tabuleiro.printTabuleiroPecas();
 		//tabuleiro.printTabuleiro();
 		ia.fazerJogada();
-		ia.tabuleiro.printTabuleiro();
+		ia.tabuleiro.printTabuleiroPecas();
 		//tabuleiro.printTabuleiro();
 	}
 
