@@ -26,11 +26,16 @@ public class Tabuleiro {
 	}
 	
 	//Insere a peça do 'jogador' numa posicao do tabuleiro
-	//Nao esquecer de criar uma verificacao de ocupacao da casa
-	public void inserePeca(int linha, int col, char jogador){
-		if(jogador == 'x')
-			this.tabuleiro[linha][col] = 'x';
-		else 
-			this.tabuleiro[linha][col] = 'o';
+	public boolean inserePeca(int linha, int col, char jogador){
+            if(!(this.tabuleiro[linha][col] == '.')){
+                System.out.println("-> Ja existe uma peca nesta posicao!");
+                return false;
+            }
+            if(jogador == 'x')
+                    this.tabuleiro[linha][col] = 'x';
+            else 
+                    this.tabuleiro[linha][col] = 'o';
+            
+            return true;
 	}
 }
