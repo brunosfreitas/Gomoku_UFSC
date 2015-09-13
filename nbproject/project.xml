@@ -9,5 +9,14 @@
             </source-roots>
             <test-roots/>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>atual</word>
+            <word>Jogador</word>
+            <word>Melhor</word>
+            <word>movimento</word>
+            <word>procurar</word>
+            <word>Profundidade</word>
+            <word>Tabuleiro</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

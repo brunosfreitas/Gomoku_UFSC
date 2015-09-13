@@ -46,8 +46,8 @@ public class Tabuleiro {
             else 
                     this.tabuleiroPecas[linha][col] = 'o';
             
-            this.setAmeaca(linha, col, this);
-            this.printTabuleiroAmeaca();
+//            this.setAmeaca(linha, col, this);
+//            this.printTabuleiroAmeaca();
             return true;
 	}
         
@@ -85,12 +85,20 @@ public class Tabuleiro {
             }
         }
         
+//        Retorna a soma total do tabuleiro de ameaca
+        public double getSomaAmeaca(Tabuleiro board){
+            double soma = 0;
+            for (int li = 0; li < 14; li++) {
+                for (int co = 0; co < 14; co++) {
+                    soma += board.tabuleiroAmeaca[li][co];
+                }
+            }
+            return soma;
+        }
         
-//      Método retorna a soma total dos campos de ameaça
-        
-        public double retornaEstado(Tabuleiro um, Tabuleiro dois){
-            
-            return 0;
+//      Método retorna a soma total dos campos de ameaça (n sei se vai ser util pra algo rsrs)
+        public double getSomaAmbasAmeacas(Tabuleiro um, Tabuleiro dois){
+            return um.getSomaAmeaca(um) + dois.getSomaAmeaca(dois);
         }
         
         

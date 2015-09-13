@@ -16,11 +16,13 @@ public class Principal {
 		Tabuleiro tabuleiroDoJogo = new Tabuleiro();
 		Jogador jogador = new Jogador();
 		IA ia = new IA();
-		jogador.fazerJogada();
-		jogador.tabuleiro.printTabuleiroPecas();
+		jogador.fazerJogada(tabuleiroDoJogo);
+                tabuleiroDoJogo.printTabuleiroPecas();
+//		jogador.tabuleiro.printTabuleiroPecas();
 		//tabuleiro.printTabuleiro();
-		ia.fazerJogada();
-		ia.tabuleiro.printTabuleiroPecas();
+		ia.fazerJogada(tabuleiroDoJogo);
+                tabuleiroDoJogo.printTabuleiroPecas();
+//		ia.tabuleiro.printTabuleiroPecas();
 		//tabuleiro.printTabuleiro();
 	}
 
