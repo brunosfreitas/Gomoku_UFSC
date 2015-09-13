@@ -55,9 +55,8 @@ public class Tabuleiro {
 //      Li e co sao as coordenadas da peca
         public void setAmeaca(int li, int co, Tabuleiro board){
             
-//          i representa o numero de casas, ou seja, nao nao iremos
-//          realizar o looping mais de 14x. O numero eh 14 pois 15 - uma peca ja inserida.
-            int i = 1;
+//          i representa o numero de casas a percorrer. O numero eh 14 pois 15 - uma peca ja inserida.
+            int i = 0;
             int pos = 1;
             int neg = 1;
             while (i<14) {
@@ -85,7 +84,7 @@ public class Tabuleiro {
             }
         }
         
-//        Retorna a soma total do tabuleiro de ameaca
+//      Retorna a soma total do tabuleiro de ameaca
         public double getSomaAmeaca(Tabuleiro board){
             double soma = 0;
             for (int li = 0; li < 14; li++) {
@@ -100,7 +99,6 @@ public class Tabuleiro {
         public double getSomaAmbasAmeacas(Tabuleiro um, Tabuleiro dois){
             return um.getSomaAmeaca(um) + dois.getSomaAmeaca(dois);
         }
-        
         
         /*Métodos de verificacao*/
         

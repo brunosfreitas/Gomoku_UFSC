@@ -1,4 +1,7 @@
 
+import java.util.Scanner;
+
+
 /* Graduandos:
  * Bruno Freitas &
  * Rodrigo Pedro Marques.
@@ -11,19 +14,37 @@
 
 public class Principal {
 
-	public static void main(String[] args) {
-			
-		Tabuleiro tabuleiroDoJogo = new Tabuleiro();
-		Jogador jogador = new Jogador();
-		IA ia = new IA();
-		jogador.fazerJogada(tabuleiroDoJogo);
-                tabuleiroDoJogo.printTabuleiroPecas();
-//		jogador.tabuleiro.printTabuleiroPecas();
-		//tabuleiro.printTabuleiro();
-		ia.fazerJogada(tabuleiroDoJogo);
-                tabuleiroDoJogo.printTabuleiroPecas();
-//		ia.tabuleiro.printTabuleiroPecas();
-		//tabuleiro.printTabuleiro();
+    public static void main(String[] args) {
+
+        Tabuleiro tabuleiroDoJogo = new Tabuleiro();
+        Jogador jogador = new Jogador();
+        IA ia = new IA();
+        Scanner input = new Scanner(System.in);
+        boolean selecao = false;
+        
+        while (selecao == false) {
+            System.out.print("Você quer ser 'x' ou 'o'?");	  
+            String linhaString = input.nextLine();
+            
+            char peca = linhaString.charAt(0);
+            if (peca == 'x') {
+                jogador.setPeca('x');
+                ia.setPeca('o');
+                selecao = true;
+            } else {
+                if (peca == 'o'){
+                    jogador.setPeca('o');
+                    ia.setPeca('x');
+                    selecao = true;
+                }
+            }
+        }
+        
+        jogador.fazerJogada(tabuleiroDoJogo);
+        tabuleiroDoJogo.printTabuleiroPecas();
+
+        ia.fazerJogada(tabuleiroDoJogo);
+        tabuleiroDoJogo.printTabuleiroPecas();
 	}
 
 }

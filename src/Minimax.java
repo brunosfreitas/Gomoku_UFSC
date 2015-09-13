@@ -1,7 +1,4 @@
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /*
 Links:
@@ -33,6 +30,9 @@ public class Minimax {
     
 
     public void MiniMax(Tabuleiro board, int alfa, int beta, int depth, Jogador player){
-        
+        if (temCincoPecasEmSequencia){
+            Jogador ganhador = new Jogador(tabuleiro.getWinner());
+            
+        }
     }
 }
