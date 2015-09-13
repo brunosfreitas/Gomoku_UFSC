@@ -30,9 +30,10 @@ public class Minimax {
     
 
     public void MiniMax(Tabuleiro board, int alfa, int beta, int depth, Jogador player){
-        if (temCincoPecasEmSequencia){
+        if (board.temCincoPecasEmSequencia){
             Jogador ganhador = new Jogador(tabuleiro.getWinner());
-            
+            terminaJogo;
         }
+        
     }
 }

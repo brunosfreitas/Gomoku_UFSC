@@ -35,51 +35,74 @@ public class Tabuleiro {
             }
 	}
 	
-//	Insere a peça do 'jogador' numa posicao do tabuleiroPecas
-	public boolean inserePeca(int linha, int col, char jogador){
+//	Insere a peça do jogador numa posicao do tabuleiroPecas
+	public boolean inserePeca(int linha, int col, Jogador player){
             if(this.existePeca(linha, col)){
-                System.out.println("-> Ja existe uma peca nesta posicao!");
+                System.out.println("\n-> Ja existe uma peca nesta posicao!");
                 return false;
             }
-            if(jogador == 'x')
+            if(player.getPeca() == 'x')
                     this.tabuleiroPecas[linha][col] = 'x';
             else 
                     this.tabuleiroPecas[linha][col] = 'o';
             
-//            this.setAmeaca(linha, col, this);
-//            this.printTabuleiroAmeaca();
+            this.setAmeaca(linha, col, player);
+            this.printTabuleiroAmeaca();
             return true;
 	}
         
-//      Dado o exemplo na planilha, li = n & co = m.
-//      Li e co sao as coordenadas da peca
-        public void setAmeaca(int li, int co, Tabuleiro board){
+        
+        public void setAmeaca(int li, int co, Jogador player){
+//          Dado o exemplo na planilha, n = li & m = co.
+//          li e co sao as coordenadas da peca
             
 //          i representa o numero de casas a percorrer. O numero eh 14 pois 15 - uma peca ja inserida.
             int i = 0;
-            int pos = 1;
-            int neg = 1;
-            while (i<14) {
-//              Incrementacao Positiva
-                if((co+pos) < 14){
-                    if((4-pos) > 0)
-                        board.tabuleiroAmeaca[li][co+pos] = 4-pos;
-                    else
-                        board.tabuleiroAmeaca[li][co+pos] = 0.1;
-                }
-                pos++;
+            int var = 1;
+            
+            while (i<7) {
                 
-//              Incrementacao Negativa
-                if(co-neg > 0){
-                    if((4-neg) > 0)
-                        board.tabuleiroAmeaca[li][co-neg] = 4-neg;
-                    else
-                        board.tabuleiroAmeaca[li][co-neg] = 0.1;
+//                Pra cima
+                if ((li - var) > 0) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co] + (5-var);
                 }
-                neg--;
                 
-//              Incrementacao Horizontal
-                   
+//                Pra baixo
+                if ((li + var) < 14) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] + (5-var);
+                }
+                
+//                pra esquerda
+                if ((co - var) > 0) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li][co-var] + (5-var);
+                }
+                
+//                pra direita
+                if ((co + var) < 14) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li][co+var] + (5-var);
+                }
+                
+//                diagonal superior esquerda
+                if ((li - var) > 0 && (co - var) > 0) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co-var] + (5-var);
+                }
+                
+//                diagonal superior direita
+                if ((li - var) > 0 && (co + var) < 14) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] + (5-var);
+                }
+                
+//                diagonal inferior esquerda
+                if ((li + var) < 14 && (co - var) > 0) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co-var] + (5-var);
+                }
+                
+//                diagonal inferior direita
+                if ((li + var) < 14 && (co + var) < 14) {
+                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co+var] + (5-var);
+                }                
+                
+                var++;
                 i++;
             }
         }

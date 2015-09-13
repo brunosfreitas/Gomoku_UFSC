@@ -14,6 +14,10 @@ public class Jogador {
     public void setPeca(char simbolo){
         this.peca = simbolo;
     }
+    
+    public char getPeca(){
+        return this.peca;
+    }
 
     void fazerJogada(Tabuleiro tabuleiroDoJogo){	  
         inputJogada = new Scanner(System.in);
@@ -26,8 +30,7 @@ public class Jogador {
         String colunaString = inputJogada.nextLine();
         int coluna = Integer.parseInt(colunaString);
 
-        tabuleiroDoJogo.inserePeca(linha, coluna, this.peca);
-//      tabuleiro.inserePeca(linha, coluna, 'x'); 
+        tabuleiroDoJogo.inserePeca(linha, coluna, this);
       }
 	
 }

@@ -24,13 +24,18 @@ public class IA extends Jogador{
         String colunaString = inputJogada.nextLine();
         int coluna = Integer.parseInt(colunaString);
 
-        tabuleiroDoJogo.inserePeca(linha, coluna, this.peca);
-//        tabuleiro.inserePeca(linha, coluna, 'o');
+        tabuleiroDoJogo.inserePeca(linha, coluna, this);
+        this.tabuleiroAmeaca.printTabuleiroAmeaca();
       }
     
         
     @Override
     public void setPeca(char simbolo){
         this.peca = simbolo;
+    }
+    
+    @Override
+    public char getPeca(){
+        return this.peca;
     }
 }
