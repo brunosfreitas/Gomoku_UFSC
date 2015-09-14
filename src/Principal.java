@@ -16,7 +16,7 @@ public class Principal {
 
     public static void main(String[] args) {
 
-        Tabuleiro tabuleiroDoJogo = new Tabuleiro();
+        Tabuleiro tabuleiroDoJogo = Tabuleiro.getInstance();
         Jogador jogador = new Jogador();
         IA ia = new IA();
         Scanner input = new Scanner(System.in);
@@ -41,10 +41,10 @@ public class Principal {
             }
         }
         
-        jogador.fazerJogada(tabuleiroDoJogo);
+        jogador.fazerJogada();
         tabuleiroDoJogo.printTabuleiroPecas();
 
-        ia.fazerJogada(tabuleiroDoJogo);
+        ia.fazerJogada();
         tabuleiroDoJogo.printTabuleiroPecas();
 	}
 

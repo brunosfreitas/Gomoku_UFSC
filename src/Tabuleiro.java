@@ -1,21 +1,36 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Tabuleiro {
+    
+        //Singleton
+        private static Tabuleiro instance;
 	
-	char[][] tabuleiroPecas;
-        double[][] tabuleiroAmeaca;
-	final int dimensao = 15;
+	public char[][] tabuleiroPecas;
+        public double[][] tabuleiroAmeacaJogador;
+        public double[][] tabuleiroAmeacaIA;
+	public final int dimensao = 15;
 	
-	public Tabuleiro(){
+	private Tabuleiro(){
 		this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
+                this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
+                this.tabuleiroAmeacaIA = new double[this.dimensao][this.dimensao];
 		
 //		Iniciar o tabuleiroPecas com pontos que irao representar as interseccoes das linhas
 		for(int li=0; li < this.dimensao; li++){
 			for (int co = 0; co < this.dimensao; co++){
 				this.tabuleiroPecas[li][co] = '.';
+                                this.tabuleiroAmeacaJogador[li][co] = 0;
+                                this.tabuleiroAmeacaIA[li][co] = 0;
 			}
 		}
 	}
+        
+        public static Tabuleiro getInstance(){
+            if(instance == null)
+                instance = new Tabuleiro();
+            return instance;
+        }
 	
 	public void printTabuleiroPecas(){
 		for (int i = 0; i < this.dimensao; i++) {
@@ -29,7 +44,7 @@ public class Tabuleiro {
         public void printTabuleiroAmeaca(){
             for (int i = 0; i < this.dimensao; i++) {
                 for (int j = 0; j < this.dimensao; j++) {
-                    System.out.print(this.tabuleiroAmeaca[i][j] + " ");
+                    System.out.print(this.tabuleiroAmeacaJogador[i][j] - this.tabuleiroAmeacaIA[i][j] + " ");
                 }
                 System.out.print("\n");
             }
@@ -52,77 +67,97 @@ public class Tabuleiro {
 	}
         
         
-        public void setAmeaca(int li, int co, Jogador player){
+        public void setAmeaca(int linha, int coluna, Jogador player){
 //          Dado o exemplo na planilha, n = li & m = co.
 //          li e co sao as coordenadas da peca
             
-//          i representa o numero de casas a percorrer. O numero eh 14 pois 15 - uma peca ja inserida.
-            int i = 0;
-            int var = 1;
+            //Singleton
+            Tabuleiro tabuleiro = Tabuleiro.getInstance();
             
-            while (i<7) {
+//          deslocamento representa o numero de casas a percorrer. O numero eh 14 pois 15 - uma peca ja inserida.
+            int deslocamento = 1;
+            int pontuacaoLocal = 7;
+            
+            while (deslocamento<=7) {
                 
-//                Pra cima
-                if ((li - var) > 0) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co] + (5-var);
+                //Oeste
+                try{
+                   tabuleiro.adicionarAmeaça(linha, coluna-deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                Pra baixo
-                if ((li + var) < 14) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] + (5-var);
+                //Leste
+                try{
+                   tabuleiro.adicionarAmeaça(linha, coluna+deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                pra esquerda
-                if ((co - var) > 0) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li][co-var] + (5-var);
+                //Norte
+                try{
+                   tabuleiro.adicionarAmeaça(linha-deslocamento, coluna, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                pra direita
-                if ((co + var) < 14) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li][co+var] + (5-var);
+                //Sul
+                try{
+                   tabuleiro.adicionarAmeaça(linha+deslocamento, coluna, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                diagonal superior esquerda
-                if ((li - var) > 0 && (co - var) > 0) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co-var] + (5-var);
+                //Norte - Oeste
+                try{
+                   tabuleiro.adicionarAmeaça(linha-deslocamento, coluna-deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                diagonal superior direita
-                if ((li - var) > 0 && (co + var) < 14) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li-var][co+var] + (5-var);
+                //Norte - Leste
+                try{
+                   tabuleiro.adicionarAmeaça(linha-deslocamento, coluna+deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                diagonal inferior esquerda
-                if ((li + var) < 14 && (co - var) > 0) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co-var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co-var] + (5-var);
+                //Sul - Lestex
+                try{
+                   tabuleiro.adicionarAmeaça(linha+deslocamento, coluna+deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
                 }
                 
-//                diagonal inferior direita
-                if ((li + var) < 14 && (co + var) < 14) {
-                    player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co+var] = player.tabuleiroAmeaca.tabuleiroAmeaca[li+var][co+var] + (5-var);
-                }                
+                //Sul - Oeste
+                try{
+                   tabuleiro.adicionarAmeaça(linha+deslocamento, coluna-deslocamento, player, pontuacaoLocal);
+                }catch(Exception e){      
+                }
                 
-                var++;
-                i++;
+                pontuacaoLocal--;
+                deslocamento++;
+            }
+        }
+        
+        public void adicionarAmeaça(int linha, int coluna, Jogador player, double valor){
+            //Singleton
+            Tabuleiro tabuleiro = Tabuleiro.getInstance();
+            
+            if(player.identificador == 666){
+                System.out.println("Pika");
+                tabuleiro.tabuleiroAmeacaIA[linha][coluna] = tabuleiro.tabuleiroAmeacaIA[linha][coluna] + valor;
+            }else{
+                tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;      
             }
         }
         
 //      Retorna a soma total do tabuleiro de ameaca
-        public double getSomaAmeaca(Tabuleiro board){
+        public double getSomaAmeaca(){
             double soma = 0;
+            Tabuleiro tabuleiro = Tabuleiro.getInstance();
+
             for (int li = 0; li < 14; li++) {
                 for (int co = 0; co < 14; co++) {
-                    soma += board.tabuleiroAmeaca[li][co];
+                    soma += tabuleiro.tabuleiroAmeacaIA[li][co] - tabuleiro.tabuleiroAmeacaJogador[li][co];
                 }
             }
             return soma;
         }
-        
-//      Método retorna a soma total dos campos de ameaça (n sei se vai ser util pra algo rsrs)
-        public double getSomaAmbasAmeacas(Tabuleiro um, Tabuleiro dois){
-            return um.getSomaAmeaca(um) + dois.getSomaAmeaca(dois);
-        }
-        
+          
         /*Métodos de verificacao*/
         
 //      Verifica se tem uma peca na coordenada dada.

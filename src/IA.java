@@ -1,19 +1,20 @@
 import java.util.Scanner;
 
 public class IA extends Jogador{
-	
-//	Tabuleiro tabuleiro;
-    Tabuleiro tabuleiroAmeaca;
+
     private Scanner inputJogada;
     private char peca;
+    public int identificador = 666;
     
    
     public IA(){
-        tabuleiroAmeaca = new Tabuleiro();
+        
     }
     
     @Override
-    void fazerJogada(Tabuleiro tabuleiroDoJogo){		  
+    void fazerJogada(){
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
         inputJogada = new Scanner(System.in);
 
         System.out.print("Digite o numero da linha:");	  
@@ -24,8 +25,7 @@ public class IA extends Jogador{
         String colunaString = inputJogada.nextLine();
         int coluna = Integer.parseInt(colunaString);
 
-        tabuleiroDoJogo.inserePeca(linha, coluna, this);
-        this.tabuleiroAmeaca.printTabuleiroAmeaca();
+        tabuleiro.inserePeca(linha, coluna, this);
       }
     
         

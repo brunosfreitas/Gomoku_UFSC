@@ -3,12 +3,11 @@ import java.util.Scanner;
 public class Jogador {	
 	
 //	Tabuleiro tabuleiro;
-    Tabuleiro tabuleiroAmeaca;
     private Scanner inputJogada;
     private char peca;
+    public int identificador = 111;
 
     public Jogador(){
-        tabuleiroAmeaca = new Tabuleiro();
     }
     
     public void setPeca(char simbolo){
@@ -19,7 +18,9 @@ public class Jogador {
         return this.peca;
     }
 
-    void fazerJogada(Tabuleiro tabuleiroDoJogo){	  
+    void fazerJogada(){	  
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
         inputJogada = new Scanner(System.in);
 
         System.out.print("Digite o numero da linha:");	  
@@ -30,7 +31,7 @@ public class Jogador {
         String colunaString = inputJogada.nextLine();
         int coluna = Integer.parseInt(colunaString);
 
-        tabuleiroDoJogo.inserePeca(linha, coluna, this);
+        tabuleiro.inserePeca(linha, coluna, this);
       }
 	
 }
