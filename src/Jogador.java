@@ -5,7 +5,7 @@ public class Jogador {
 //	Tabuleiro tabuleiro;
     private Scanner inputJogada;
     private char peca;
-    public int identificador = 111;
+    public EnumTabuleiro identificador = EnumTabuleiro.JOGADOR;
 
     public Jogador(){
     }

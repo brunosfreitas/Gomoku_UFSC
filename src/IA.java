@@ -4,11 +4,10 @@ public class IA extends Jogador{
 
     private Scanner inputJogada;
     private char peca;
-    public int identificador = 666;
     
-   
+    
     public IA(){
-        
+        identificador = EnumTabuleiro.IA;
     }
     
     @Override

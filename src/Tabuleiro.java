@@ -137,12 +137,12 @@ public class Tabuleiro {
             //Singleton
             Tabuleiro tabuleiro = Tabuleiro.getInstance();
             
-            if(player.identificador == 666){
-                System.out.println("Pika");
+            if(player.identificador == EnumTabuleiro.IA){
                 tabuleiro.tabuleiroAmeacaIA[linha][coluna] = tabuleiro.tabuleiroAmeacaIA[linha][coluna] + valor;
             }else{
-                tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;      
+                tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;
             }
+            
         }
         
 //      Retorna a soma total do tabuleiro de ameaca
