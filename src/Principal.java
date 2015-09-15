@@ -43,14 +43,14 @@ public class Principal {
         boolean vitoria5emLinha = true;
 
         while (vitoria5emLinha) {
-            jogador.fazerJogada();
-            tabuleiroDoJogo.printTabuleiroPecas();
-            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
-            
             ia.fazerJogada();
             tabuleiroDoJogo.printTabuleiroPecas();
             tabuleiroDoJogo.getSomaAmeaca();
-            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());                
+            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca()); 
+            
+            jogador.fazerJogada();
+            tabuleiroDoJogo.printTabuleiroPecas();
+            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
         }
 
     }

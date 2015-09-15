@@ -229,34 +229,40 @@ public class Tabuleiro {
     }
 
 //    int[0] = linha; int[1] = coluna;
-    public int[] getCoordMaiorValor(Tabuleiro board, Jogador player){
+    public int[] getCoordMaiorValorIA(Tabuleiro board){
         double maiorValor = 0;
         int[] coord = {99, 99};
         
-        if (player.identificador == EnumTabuleiro.IA) {
-            for (int i = 0; i < this.dimensao; i++) {
-                for (int j = 0; j < this.dimensao; j++) {
-                    if (board.tabuleiroAmeacaIA[i][j] > maiorValor) {
-                        maiorValor = board.tabuleiroAmeacaIA[i][j];
-                        coord[0] = i;
-                        coord[1] = j;
-                    }
+        for (int i = 0; i < this.dimensao; i++) {
+            for (int j = 0; j < this.dimensao; j++) {
+                if (board.tabuleiroAmeacaIA[i][j] > maiorValor) {
+                    maiorValor = board.tabuleiroAmeacaIA[i][j];
+                    coord[0] = i;
+                    coord[1] = j;
                 }
             }
-        } else {
-            for (int i = 0; i < this.dimensao; i++) {
-                for (int j = 0; j < this.dimensao; j++) {
-                    if (board.tabuleiroAmeacaJogador[i][j] > maiorValor) {
-                        maiorValor = board.tabuleiroAmeacaIA[i][j];
-                        coord[0] = i;
-                        coord[1] = j;
-                    }
-                }
-            }  
         }
         
         return coord;
     }
+    
+    public int[] getCoordMaiorValorJOGADOR(Tabuleiro board){
+        double maiorValor = 0;
+        int[] coord = {99, 99};
+        
+        for (int i = 0; i < this.dimensao; i++) {
+            for (int j = 0; j < this.dimensao; j++) {
+                if (board.tabuleiroAmeacaJogador[i][j] > maiorValor) {
+                    maiorValor = board.tabuleiroAmeacaIA[i][j];
+                    coord[0] = i;
+                    coord[1] = j;
+                }
+            }
+        }
+        
+        return coord;
+    }
+        
 //      Retorna a soma total do tabuleiro de ameaca
     public double getSomaAmeaca() {
         double soma = 0;
