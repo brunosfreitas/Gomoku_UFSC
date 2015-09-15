@@ -10,6 +10,9 @@ public class Tabuleiro {
     public double[][] tabuleiroAmeacaIA;
     public final int dimensao = 15;
     
+    /*
+        Construtor privado de classe necessário para a implementação correta de um singleton.
+    */
     private Tabuleiro() {
         this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
@@ -25,6 +28,9 @@ public class Tabuleiro {
         }
     }
 
+    /*
+    Singleton: em todo o programa só existe uma única classe tabuleiro, se ela não existir cria-se uma nova, se já existir retorna a existente.
+    */
     public static Tabuleiro getInstance() {
         if (instance == null) {
             instance = new Tabuleiro();
@@ -69,7 +75,6 @@ public class Tabuleiro {
         this.printTabuleiroAmeaca();
         return true;
     }
-
     
     
     public void setAmeaca(int linha, int coluna, Jogador player) {
@@ -80,7 +85,6 @@ public class Tabuleiro {
         //Peça do inimigo
         char pecaInimigo = (player.getPeca() == 'x') ? 'o' : 'x';
 
-//      deslocamento representa o numero de casas a percorrer. O numero eh 14 pois 15 - uma peca ja inserida.
         int deslocamento = 1;
         int pontuacaoLocal = 7;
 
@@ -103,6 +107,10 @@ public class Tabuleiro {
         this.tabuleiroAmeacaJogador[linha][coluna] = 0;
         this.tabuleiroAmeacaIA[linha][coluna] = 0;
 
+        
+        //Num raio de 7 casas a partir do ponto onde a peca foi inserida, a ameaca é gerada no formato de "estrela" como foi mostrado no relatório.
+        //Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção representadas pelas oito varíaveis "caminhoLivreX".
+        //@TODO Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
         while (deslocamento <= 7) {
 
             //Oeste
@@ -114,7 +122,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreOeste) {
-                    tabuleiro.adicionarAmeaça(linha, coluna - deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha, coluna - deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -127,7 +135,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreLeste) {
-                    tabuleiro.adicionarAmeaça(linha, coluna + deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha, coluna + deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -140,7 +148,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreNorte) {
-                    tabuleiro.adicionarAmeaça(linha - deslocamento, coluna, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -153,7 +161,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreSul) {
-                    tabuleiro.adicionarAmeaça(linha + deslocamento, coluna, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -166,7 +174,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreNorteOeste) {
-                    tabuleiro.adicionarAmeaça(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -179,7 +187,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreNorteLeste) {
-                    tabuleiro.adicionarAmeaça(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -192,7 +200,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreSulLeste) {
-                    tabuleiro.adicionarAmeaça(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -205,7 +213,7 @@ public class Tabuleiro {
                 }
 
                 if (caminhoLivreSulOeste) {
-                    tabuleiro.adicionarAmeaça(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
                 }
             } catch (Exception e) {
             }
@@ -330,7 +338,8 @@ public class Tabuleiro {
     }
 
     // Verifica qual o jogador e coloca a ameaca no seu respectivo tabuleiro
-    public void adicionarAmeaça(int linha, int coluna, Jogador player, double valor) {
+    // Método necessário para setAmeaca
+    public void adicionarAmeaca(int linha, int coluna, Jogador player, double valor) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
 
@@ -342,6 +351,7 @@ public class Tabuleiro {
     }
 
 //    int[0] = linha; int[1] = coluna;
+    //Este método visa buscar a coordenada da casa com maior pontuação a se jogar.
     public int[] getCoordMaiorValorIA(Tabuleiro board){
         double maiorValor = 0;
         int[] coord = {99, 99};
@@ -359,6 +369,7 @@ public class Tabuleiro {
         return coord;
     }
     
+    //Este método visa buscar a coordenada da casa com maior pontuação a se jogar.
     public int[] getCoordMaiorValorJOGADOR(Tabuleiro board){
         double maiorValor = 0;
         int[] coord = {99, 99};

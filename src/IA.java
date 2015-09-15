@@ -17,7 +17,11 @@ public class IA extends Jogador{
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
         inputJogada = new Scanner(System.in);
-
+        
+        double[] coord = minimax.minimax(tabuleiro, Integer.MAX_VALUE, Integer.MIN_VALUE, 5, identificador);
+        tabuleiro.inserePeca((int)coord[1], (int)coord[2], this);
+        return tabuleiro.verificarVitoria((int)coord[1], (int)coord[2], this);
+        
 //        System.out.print("Digite o numero da linha:");	  
 //        String linhaString = inputJogada.nextLine();
 //        int linha = Integer.parseInt(linhaString);
@@ -25,14 +29,11 @@ public class IA extends Jogador{
 //        System.out.print("Digite o numero da coluna:");
 //        String colunaString = inputJogada.nextLine();
 //        int coluna = Integer.parseInt(colunaString);
-        double[] coord = minimax.minimax(tabuleiro, Integer.MAX_VALUE, Integer.MIN_VALUE, 5, identificador);
+//        tabuleiro.inserePeca(linha, coluna, this);
+//        return true;
 
-
-        tabuleiro.inserePeca((int)coord[1], (int)coord[2], this);
-        return tabuleiro.verificarVitoria((int)coord[1], (int)coord[2], this);
       }
-    
-        
+       
     @Override
     public void setPeca(char simbolo){
         this.peca = simbolo;

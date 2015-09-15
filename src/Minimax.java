@@ -26,18 +26,17 @@ public class Minimax {
      * @param beta      Melhor movimento do Min
      * @param depth     Profundidade a procurar
      * @param player    Jogador atual
-     * @return a melhor pontuacao encontrada
+     * @return a melhor pontuacao encontrada (double[0] = pontuacao; double[1] = linha; double[2] = coluna.)
+     * @TODO Melhorar a implementação de acordo com as melhorias na classe tabuleiro.
      * IA é o Max
      * Jogador é o Min
-
      */
     
-// double[0] = pontuacao; double[1] = linha; double[2] = coluna.
     public double[] minimax(Tabuleiro board, double alfa, double beta, int depth, EnumTabuleiro player){
         
         double pontuacao;
-        int melhorLinha = 0;
-        int melhorColuna = 0;
+        int melhorLinha = 7;
+        int melhorColuna = 7;
         
         if (depth == 0) {
             if (board.getSomaAmeaca() == 0) { //Assumindo que seja primeira jogada (Pode haver o raro caso de as ameacas se igualarem a 0, o que pode dar pau no minimax '-')
