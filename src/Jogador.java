@@ -18,7 +18,7 @@ public class Jogador {
         return this.peca;
     }
 
-    void fazerJogada(){	  
+    boolean fazerJogada(){	  
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
         inputJogada = new Scanner(System.in);
@@ -32,6 +32,7 @@ public class Jogador {
         int coluna = Integer.parseInt(colunaString);
 
         tabuleiro.inserePeca(linha, coluna, this);
-      }
+        return tabuleiro.verificarVitoria(linha, coluna, this);
+    }
 	
 }

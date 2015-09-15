@@ -1,6 +1,4 @@
-
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Tabuleiro {
 
@@ -11,7 +9,7 @@ public class Tabuleiro {
     public double[][] tabuleiroAmeacaJogador;
     public double[][] tabuleiroAmeacaIA;
     public final int dimensao = 15;
-
+    
     private Tabuleiro() {
         this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
@@ -54,14 +52,17 @@ public class Tabuleiro {
 
 //	Insere a peça do jogador numa posicao do tabuleiroPecas
     public boolean inserePeca(int linha, int col, Jogador player) {
-        if (this.existePeca(linha, col)) {
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
+        
+        if (tabuleiro.existePeca(linha, col)) {
             System.out.println("\n-> Ja existe uma peca nesta posicao!");
             return false;
         }
         if (player.getPeca() == 'x') {
-            this.tabuleiroPecas[linha][col] = 'x';
+            tabuleiro.tabuleiroPecas[linha][col] = 'x';
         } else {
-            this.tabuleiroPecas[linha][col] = 'o';
+            tabuleiro.tabuleiroPecas[linha][col] = 'o';
         }
 
         this.setAmeaca(linha, col, player);
@@ -69,9 +70,9 @@ public class Tabuleiro {
         return true;
     }
 
+    
+    
     public void setAmeaca(int linha, int coluna, Jogador player) {
-//          Dado o exemplo na planilha, n = li & m = co.
-//          li e co sao as coordenadas da peca
 
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
@@ -215,7 +216,120 @@ public class Tabuleiro {
         
         
     }
+    
+    public boolean verificarVitoria(int linha, int coluna, Jogador player){
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
+        
+        //Peça do inimigo
+        char pecaAliada = player.getPeca();
+        
+        int deslocamento = 1;
+        
+        int alinhadoOeste = 0;
+        int alinhadoLeste = 0;
+        int alinhadoNorte = 0;
+        int alinhadoSul = 0;
+        
+        int alinhadoNorteOeste = 0;
+        int alinhadoNorteLeste = 0;
+        int alinhadoSulOeste = 0;
+        int alinhadoSulLeste = 0;
+        
+        while (deslocamento <= 4) {
+            
+            //Oeste
+            try {
+                if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaAliada) {
+                    alinhadoOeste++;
+                }else{
+                    alinhadoOeste=0;
+                }
+            } catch (Exception e) {
+            }
 
+            //Leste
+            try {
+                if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaAliada) {
+                    alinhadoLeste++;
+                }else{
+                    alinhadoLeste=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Norte
+            try {
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaAliada) {
+                    alinhadoNorte++;
+                }else{
+                    alinhadoNorte=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Sul
+            try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaAliada) {
+                    alinhadoSul++;
+                }else{
+                    alinhadoSul=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Norte - Oeste
+            try {
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaAliada) {
+                    alinhadoNorteOeste++;
+                }else{
+                    alinhadoNorteOeste=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Norte - Leste
+            try {
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaAliada) {
+                    alinhadoNorteLeste++;
+                }else{
+                    alinhadoNorteLeste=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Sul - Lestex
+            try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaAliada) {
+                    alinhadoSulLeste++;
+                }else{
+                    alinhadoSulLeste=0;
+                }
+            } catch (Exception e) {
+            }
+
+            //Sul - Oeste
+            try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaAliada) {
+                    alinhadoSulOeste++;
+                }else{
+                    alinhadoSulOeste=0;
+                }
+            } catch (Exception e) {
+            }
+
+            deslocamento++;
+        
+        }
+        
+        if(alinhadoNorte == 4 || alinhadoSul == 4 || alinhadoLeste == 4 || alinhadoOeste == 4 ||
+                alinhadoNorteLeste == 4 || alinhadoNorteOeste == 4 || alinhadoSulLeste == 4 || alinhadoSulOeste == 4){
+            return true;
+        }
+        return false;     
+    }
+
+    // Verifica qual o jogador e coloca a ameaca no seu respectivo tabuleiro
     public void adicionarAmeaça(int linha, int coluna, Jogador player, double valor) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
@@ -225,7 +339,6 @@ public class Tabuleiro {
         } else {
             tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;
         }
-
     }
 
 //    int[0] = linha; int[1] = coluna;
@@ -257,7 +370,8 @@ public class Tabuleiro {
         
         return coord;
     }
-//      Retorna a soma total do tabuleiro de ameaca
+    
+    // Funcao de Utilidade - Retorna a soma total do tabuleiro de ameaca
     public double getSomaAmeaca() {
         double soma = 0;
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
@@ -275,4 +389,6 @@ public class Tabuleiro {
     public boolean existePeca(int li, int co) {
         return this.tabuleiroPecas[li][co] != '.';
     }
+    
+    
 }

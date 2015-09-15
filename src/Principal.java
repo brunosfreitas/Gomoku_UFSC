@@ -40,17 +40,27 @@ public class Principal {
             }
         }
 
-        boolean vitoria5emLinha = true;
+        boolean vitoria5emLinha = false;
 
-        while (vitoria5emLinha) {
-            jogador.fazerJogada();
+        while (!vitoria5emLinha) {
+            vitoria5emLinha = jogador.fazerJogada();
             tabuleiroDoJogo.printTabuleiroPecas();
             System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
             
-            ia.fazerJogada();
+            if(vitoria5emLinha){
+                System.out.println("Vitoria do Jogador!");
+                
+            }
+            
+            vitoria5emLinha = ia.fazerJogada();
             tabuleiroDoJogo.printTabuleiroPecas();
             tabuleiroDoJogo.getSomaAmeaca();
-            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());                
+            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
+            
+            if(vitoria5emLinha){
+                System.out.println("Vitoria da IA!");
+                
+            }
         }
 
     }

@@ -11,7 +11,7 @@ public class IA extends Jogador{
     }
     
     @Override
-    void fazerJogada(){
+    boolean fazerJogada(){
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
         inputJogada = new Scanner(System.in);
@@ -25,6 +25,7 @@ public class IA extends Jogador{
         int coluna = Integer.parseInt(colunaString);
 
         tabuleiro.inserePeca(linha, coluna, this);
+        return tabuleiro.verificarVitoria(linha, coluna, this);
       }
     
         
