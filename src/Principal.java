@@ -61,8 +61,9 @@ public class Principal {
                 System.out.println("Vitoria da IA!");
                 
             }
-        }
 
     }
-
 }
+}
+
+

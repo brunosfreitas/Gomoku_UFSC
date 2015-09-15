@@ -32,37 +32,51 @@ public class Minimax {
 
      */
     
-
-    public double minimax(Tabuleiro board, double alfa, double beta, int depth, EnumTabuleiro player){
+// double[0] = pontuacao; double[1] = linha; double[2] = coluna.
+    public double[] minimax(Tabuleiro board, double alfa, double beta, int depth, EnumTabuleiro player){
         
-        double pontuacao = 0;
-        int melhorColuna = 99;
-        int melhorLinha = 99;
+        double pontuacao;
+        int melhorLinha = 0;
+        int melhorColuna = 0;
         
         if (depth == 0) {
-            if (board.getSomaAmeaca() == 0) {
-                melhorColuna = 7;
+            if (board.getSomaAmeaca() == 0) { //Assumindo que seja primeira jogada (Pode haver o raro caso de as ameacas se igualarem a 0, o que pode dar pau no minimax '-')
+                System.out.println("\n Esta e minha primeira jogada!");
                 melhorLinha = 7;
-            } else {
-                
+                melhorColuna = 7;
+                return new double[] {board.getSomaAmeaca(), melhorLinha, melhorColuna};
+            } else { //Se nao for a primeira jogada entao calcula-se a funcao de utilidade e entao busca-se e retorna a coord da melhor posicao a se jogar
+                pontuacao = board.getSomaAmeaca();
+                if (player.equals(EnumTabuleiro.IA)) {
+                    melhorLinha = board.getCoordMaiorValorIA(board)[0];
+                    melhorColuna = board.getCoordMaiorValorIA(board)[1];
+                    return new double[] {pontuacao, melhorLinha, melhorColuna};
+                } else{
+                    melhorLinha = board.getCoordMaiorValorJOGADOR(board)[0];
+                    melhorColuna = board.getCoordMaiorValorJOGADOR(board)[1];
+                    return new double[] {pontuacao, melhorLinha, melhorColuna};
+                }
             }
         } else {
             if (player.equals(EnumTabuleiro.IA)) {
-                pontuacao = minimax(board, alfa, beta, depth - 1, EnumTabuleiro.JOGADOR); //Tem que ser jogador pois o proximo nivel sera Min
+                double[] retornoDoMinimax = minimax(board, alfa, beta, depth - 1, EnumTabuleiro.JOGADOR); //Tem que ser jogador pois o proximo nivel sera Min
+                pontuacao = retornoDoMinimax[0];
                 if (pontuacao > alfa) {
                     alfa = pontuacao;
+                    melhorLinha = (int)retornoDoMinimax[1];
+                    melhorColuna = (int)retornoDoMinimax[2];
                 }
             } else {
-                pontuacao = minimax(board, alfa, beta, depth - 1, EnumTabuleiro.IA); //Tem que ser IA pois o proximo nivel sera Max
+                double[] retornoDoMinimax = minimax(board, alfa, beta, depth - 1, EnumTabuleiro.IA); //Tem que ser IA pois o proximo nivel sera Max
+                pontuacao = retornoDoMinimax[0];
                 if (pontuacao < beta) {
                     beta = pontuacao;
+                    melhorLinha = (int)retornoDoMinimax[1];
+                    melhorColuna = (int)retornoDoMinimax[2];
                 }
             }
         }
         
-        
-        
-        
-        return 0; //so pro compilador parar de reclamar.
+        return new double[] {pontuacao, melhorLinha, melhorColuna};
     }
 }
