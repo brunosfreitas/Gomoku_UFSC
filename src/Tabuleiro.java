@@ -4,16 +4,18 @@ public class Tabuleiro {
 
     //Singleton
     private static Tabuleiro instance;
-
+    private boolean primeiraJogada;
     public char[][] tabuleiroPecas;
     public double[][] tabuleiroAmeacaJogador;
     public double[][] tabuleiroAmeacaIA;
     public final int dimensao = 15;
     
+    
     /*
         Construtor privado de classe necessário para a implementação correta de um singleton.
     */
     private Tabuleiro() {
+        this.primeiraJogada = true;
         this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaIA = new double[this.dimensao][this.dimensao];
@@ -70,7 +72,8 @@ public class Tabuleiro {
         } else {
             tabuleiro.tabuleiroPecas[linha][col] = 'o';
         }
-
+        
+        this.primeiraJogada = false;
         this.setAmeaca(linha, col, player);
         this.printTabuleiroAmeaca();
         return true;

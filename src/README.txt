@@ -7,11 +7,11 @@ Data:                   FLORIANÓPOLIS, 11 DE SETEMBRO DE 2015.
 Linguagem Utilizada:    Java.
 
 TO-DO List:
-            []  Criar tabuleiros de ameaça de cada 'jogador'.
-            []  Criar a inserção de peça com "pontuacao".
+            [X]  Criar tabuleiros de ameaça de cada 'jogador'.
+            [/]  Criar a inserção de peça com "pontuacao".
             [X]  Definir o que eh um estado.
                     É a soma total do seu tabuleiro de ameaça.
-            []  Somatorio do Tabuleiro.
+            [X]  Somatorio do Tabuleiro.
             []
             []
             []
