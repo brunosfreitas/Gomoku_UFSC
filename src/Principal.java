@@ -23,8 +23,7 @@ public class Principal {
         
         boolean selecao = false;
         boolean iaInicia = true;
-
-
+        
         while (!selecao) {
             System.out.print("Você quer ser 'x' ou 'o'?");
             String linhaString = input.nextLine();
@@ -98,6 +97,9 @@ public class Principal {
                 }
             } 
         }
+        
+        System.out.println("\n ~~~~ Shutting down system ~~~~");
+        System.exit(0);
 }
 }
 

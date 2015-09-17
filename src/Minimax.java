@@ -6,20 +6,29 @@ Links:
     Demonstracao do MiniMax:        http://www.ai.mit.edu/courses/6.034f/gamepair.html
 
 */
+
+/*
+Pseudo MiniMax (rascunho do professor):
+    minimax(player,board)
+    if(game over in current board position)
+        return winner
+    children = all legal moves for player from this board
+    if(max's turn)
+        return maximal score of calling minimax on all the children
+    else (min's turn)
+        return minimal score of calling minimax on all the children
+*/
 public class Minimax {
-
-    /*
-    Pseudo MiniMax (rascunho do professor):
-        minimax(player,board)
-        if(game over in current board position)
-            return winner
-        children = all legal moves for player from this board
-        if(max's turn)
-            return maximal score of calling minimax on all the children
-        else (min's turn)
-            return minimal score of calling minimax on all the children
-    */
-
+    
+    private int melhorLinha;
+    private int melhorColuna;
+    double pontuacao;
+    
+    public Minimax(){
+        this.melhorColuna = 7;
+        this.melhorLinha = 7;
+        this.pontuacao = 0;
+    }
     /**
      * @param board     Tabuleiro
      * @param alfa      Melhor movimento do Max
@@ -34,12 +43,8 @@ public class Minimax {
     
     public double[] minimax(Tabuleiro board, double alfa, double beta, int depth, EnumTabuleiro player){
         
-        double pontuacao;
-        int melhorLinha = 7;
-        int melhorColuna = 7;
-        
         if (depth == 0) {
-            if (board.getSomaAmeaca() == 0) { //Assumindo que seja primeira jogada (Pode haver o raro caso de as ameacas se igualarem a 0, o que pode dar pau no minimax '-')
+            if (board.primeiraJogada()) {
                 System.out.println("\n Esta e minha primeira jogada!");
                 melhorLinha = 7;
                 melhorColuna = 7;

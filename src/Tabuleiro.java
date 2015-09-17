@@ -79,6 +79,9 @@ public class Tabuleiro {
         return true;
     }
     
+    public boolean primeiraJogada(){
+        return this.primeiraJogada;
+    }
     
     public void setAmeaca(int linha, int coluna, Jogador player) {
 
