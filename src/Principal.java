@@ -20,7 +20,9 @@ public class Principal {
         Jogador jogador = new Jogador();
         IA ia = new IA();
         Scanner input = new Scanner(System.in);
+        
         boolean selecao = false;
+        boolean iaInicia = true;
 
 
         while (!selecao) {
@@ -41,29 +43,61 @@ public class Principal {
             }
         }
 
+        selecao = false;
+        int iniciacao = 0;
+        while (!selecao) {
+            System.out.println("\nQuem começará:\n1) Computador. \n2) Eu.");
+            String iniciacao_aux = input.nextLine();
+            iniciacao = Integer.parseInt(iniciacao_aux);
+            
+            if (iniciacao == 1 || iniciacao == 2) {
+                selecao = true;
+            } else{
+                System.out.println("\nSelecione uma opção válida.");
+            }
+        }
+        
         boolean vitoria5emLinha = false;
+        
+        if (iniciacao == 1) {
+            while (!vitoria5emLinha) {
+                vitoria5emLinha = ia.fazerJogada();
+                tabuleiroDoJogo.printTabuleiroPecas();
+                tabuleiroDoJogo.getSomaAmeaca();
+                System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
 
-        while (!vitoria5emLinha) {
-            vitoria5emLinha = jogador.fazerJogada();
-            tabuleiroDoJogo.printTabuleiroPecas();
-            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
-            
-            if(vitoria5emLinha){
-                System.out.println("Vitoria do Jogador!");
+                if(vitoria5emLinha){
+                    System.out.println("Vitoria da IA!");
+                }
                 
-            }
-            
-            vitoria5emLinha = ia.fazerJogada();
-            tabuleiroDoJogo.printTabuleiroPecas();
-            tabuleiroDoJogo.getSomaAmeaca();
-            System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
-            
-            if(vitoria5emLinha){
-                System.out.println("Vitoria da IA!");
-                
-            }
+                vitoria5emLinha = jogador.fazerJogada();
+                tabuleiroDoJogo.printTabuleiroPecas();
+                System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
 
-    }
+                if(vitoria5emLinha){
+                    System.out.println("Vitoria do Jogador!");
+                }
+            }
+        } else {
+            while (!vitoria5emLinha) {
+                vitoria5emLinha = jogador.fazerJogada();
+                tabuleiroDoJogo.printTabuleiroPecas();
+                System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
+
+                if(vitoria5emLinha){
+                    System.out.println("Vitoria do Jogador!");
+                }
+
+                vitoria5emLinha = ia.fazerJogada();
+                tabuleiroDoJogo.printTabuleiroPecas();
+                tabuleiroDoJogo.getSomaAmeaca();
+                System.out.println("Utilidade - Pontuacao Total = " + tabuleiroDoJogo.getSomaAmeaca());
+
+                if(vitoria5emLinha){
+                    System.out.println("Vitoria da IA!");
+                }
+            } 
+        }
 }
 }
 
