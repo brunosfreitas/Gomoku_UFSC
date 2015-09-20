@@ -17,6 +17,10 @@ public class Jogador {
     public char getPeca(){
         return this.peca;
     }
+    
+    public char getPecaInimigo(){
+        return (this.getPeca() == 'x') ? 'o' : 'x';
+    }
 
     boolean fazerJogada(){	  
         //Singleton

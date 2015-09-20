@@ -8,6 +8,10 @@ public class Tabuleiro {
     public char[][] tabuleiroPecas;
     public double[][] tabuleiroAmeacaJogador;
     public double[][] tabuleiroAmeacaIA;
+    
+    public double[][] tabuleiroExpoenteJogador;
+    public double[][] tabuleiroExpoenteIA;
+    
     public final int dimensao = 15;
     
     
@@ -19,6 +23,9 @@ public class Tabuleiro {
         this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaIA = new double[this.dimensao][this.dimensao];
+        
+        this.tabuleiroExpoenteJogador = new double[this.dimensao][this.dimensao];
+        this.tabuleiroExpoenteIA = new double[this.dimensao][this.dimensao];
 
 //		Iniciar o tabuleiroPecas com pontos que irao representar as interseccoes das linhas
         for (int li = 0; li < this.dimensao; li++) {
@@ -26,6 +33,9 @@ public class Tabuleiro {
                 this.tabuleiroPecas[li][co] = '.';
                 this.tabuleiroAmeacaJogador[li][co] = 0;
                 this.tabuleiroAmeacaIA[li][co] = 0;
+                
+                this.tabuleiroExpoenteJogador[li][co] = 1;
+                this.tabuleiroExpoenteIA[li][co] = 1;
             }
         }
     }
@@ -50,32 +60,37 @@ public class Tabuleiro {
     }
 
     public void printTabuleiroAmeaca() {
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();       
+        
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
-                System.out.print(this.tabuleiroAmeacaIA[i][j] - this.tabuleiroAmeacaJogador[i][j] + " ");
+                System.out.print(Math.pow(tabuleiro.tabuleiroAmeacaJogador[i][j], tabuleiroExpoenteJogador[i][j]) - Math.pow(tabuleiro.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteIA[i][j]) + " ");
             }
             System.out.print("\n");
         }
     }
 
 //	Insere a peça do jogador numa posicao do tabuleiroPecas
-    public boolean inserePeca(int linha, int col, Jogador player) {
+    public boolean inserePeca(int linha, int coluna, Jogador player) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
         
-        if (tabuleiro.existePeca(linha, col)) {
+        if (tabuleiro.existePeca(linha, coluna)) {
             System.out.println("\n-> Ja existe uma peca nesta posicao!");
             return false;
         }
         if (player.getPeca() == 'x') {
-            tabuleiro.tabuleiroPecas[linha][col] = 'x';
+            tabuleiro.tabuleiroPecas[linha][coluna] = 'x';
         } else {
-            tabuleiro.tabuleiroPecas[linha][col] = 'o';
+            tabuleiro.tabuleiroPecas[linha][coluna] = 'o';
         }
         
         this.primeiraJogada = false;
-        this.setAmeaca(linha, col, player);
+        this.setAmeaca(linha, coluna, player);
         this.printTabuleiroAmeaca();
+        System.out.println("Peça Inserida em: " + linha + " " + coluna);
+        
         return true;
     }
     
@@ -89,10 +104,10 @@ public class Tabuleiro {
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
 
         //Peça do inimigo
-        char pecaInimigo = (player.getPeca() == 'x') ? 'o' : 'x';
+        char pecaInimigo = player.getPecaInimigo();
 
         int deslocamento = 1;
-        int pontuacaoLocal = 5;
+        double pontuacaoLocal = 10;
 
         // Se uma peça estiver bloqueando, a pontuacao nao se perpetua mais
         boolean caminhoLivreNorte = true;
@@ -105,9 +120,6 @@ public class Tabuleiro {
         boolean caminhoLivreSulLeste = true;
         boolean caminhoLivreSulOeste = true;
         
-        // Além disto a pontuação da peça que já estava lá deve ser retirada. @TODO
-//        int bloqueios = 0;
-//        int[][][] pecasInimigasEncontradas = new int[8][1][]; 
 
         //Zera o local da peça colocada
         this.tabuleiroAmeacaJogador[linha][coluna] = 0;
@@ -115,123 +127,82 @@ public class Tabuleiro {
 
         
         //Num raio de 7 casas a partir do ponto onde a peca foi inserida, a ameaca é gerada no formato de "estrela" como foi mostrado no relatório.
-        //Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção representadas pelas oito varíaveis "caminhoLivreX".
+        //@TODO Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção representadas pelas oito varíaveis "caminhoLivreX".
         //@TODO Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
         while (deslocamento <= 7) {
 
             //Oeste
             try {
-//                if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna - deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreOeste = false;
-//                }
-//
-//                if (caminhoLivreOeste) {
                 if(tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha, coluna - deslocamento, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Leste
             try {
-//                if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna + deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreLeste = false;
-//                }
-//
-//                if (caminhoLivreLeste) {
                 if(tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha, coluna + deslocamento, player, pontuacaoLocal);
-//                }
+                
             } catch (Exception e) {
             }
 
             //Norte
             try {
-//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna] = pontuacaoLocal; 
-//                    caminhoLivreNorte = false;
-//                }
-//
-//                if (caminhoLivreNorte) {
                 if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Sul
             try {
-//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna] = pontuacaoLocal; 
-//                    caminhoLivreSul = false;
-//                }
-//
-//                if (caminhoLivreSul) {
+
                 if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Norte - Oeste
             try {
-//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna - deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreNorteOeste = false;
-//                }
-//
-//                if (caminhoLivreNorteOeste) {
+
                 if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Norte - Leste
             try {
-//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna + deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreNorteLeste = false;
-//                }
-//
-//                if (caminhoLivreNorteLeste) {
+
                 if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Sul - Lestex
             try {
-//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna + deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreSulLeste = false;
-////                }
-//
-//                if (caminhoLivreSulLeste) {
+
                 if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
             //Sul - Oeste
             try {
-//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaInimigo) {
-//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna - deslocamento] = pontuacaoLocal; 
-//                    caminhoLivreSulOeste = false;
-//                }
-//
-//                if (caminhoLivreSulOeste) {
+
                 if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
-//                }
+
             } catch (Exception e) {
             }
 
-            
+            pontuacaoLocal--;
+            if(pontuacaoLocal < 7)
+                pontuacaoLocal = 1;
             deslocamento++;
         }
         
@@ -244,7 +215,7 @@ public class Tabuleiro {
         
         //Peça do inimigo
         char pecaAliada = player.getPeca();
-        char pecaInimiga = (player.getPeca() == 'x') ? 'o' : 'x';
+        char pecaInimiga = player.getPecaInimigo();
         
         int deslocamento = 5;
         
@@ -258,12 +229,28 @@ public class Tabuleiro {
         int alinhadoSulOeste = 0;
         int alinhadoSulLeste = 0;
         
+        int maiorExpoenteOeste = 0;
+        int maiorExpoenteLeste = 0;
+        int maiorExpoenteNorte = 0;
+        int maiorExpoenteSul = 0;
+        
+        int maiorExpoenteNorteOeste = 0;
+        int maiorExpoenteNorteLeste = 0;
+        int maiorExpoenteSulOeste = 0;
+        int maiorExpoenteSulLeste = 0;
+        
         while (deslocamento >= -5) {
             
             //Oeste->Leste
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaAliada) {
                     alinhadoOeste++;
+                    
+                    //Ao encontrar peças alinhadas, toda aquela fila deverá ter um expoente
+                    if(alinhadoOeste > maiorExpoenteOeste)
+                        maiorExpoenteOeste = alinhadoOeste;
+                    
+                    //Se tem 5 alinhado, vitoria!
                     if(alinhadoOeste == 5)
                         return true;
                 }else{
@@ -276,6 +263,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaAliada) {
                     alinhadoLeste++;
+                    
+                    if(alinhadoLeste > maiorExpoenteLeste)
+                        maiorExpoenteLeste = alinhadoLeste;
+                    
                     if(alinhadoLeste == 5)
                         return true;
                 }else{
@@ -288,6 +279,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaAliada) {
                     alinhadoNorte++;
+                    
+                    if(alinhadoNorte > maiorExpoenteNorte)
+                        maiorExpoenteNorte = alinhadoNorte;
+                    
                     if(alinhadoNorte == 5)
                         return true;
                 }else{
@@ -300,6 +295,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaAliada) {
                     alinhadoSul++;
+                    
+                    if(alinhadoSul > maiorExpoenteSul)
+                        maiorExpoenteSul = alinhadoSul;
+                    
                     if(alinhadoSul == 5)
                         return true;
                 }else{
@@ -312,6 +311,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoNorteOeste++;
+                    
+                    if(alinhadoNorteOeste > maiorExpoenteNorteOeste)
+                        maiorExpoenteNorteOeste = alinhadoNorteOeste;
+                    
                     if(alinhadoNorteOeste == 5)
                         return true;
                 }else{
@@ -324,6 +327,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoNorteLeste++;
+                    
+                    if(alinhadoNorteLeste > maiorExpoenteNorteLeste)
+                        maiorExpoenteNorteLeste = alinhadoNorteLeste;
+                    
                     if(alinhadoNorteLeste == 5)
                         return true;
                 }else{
@@ -336,6 +343,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoSulLeste++;
+                    
+                    if(alinhadoSulLeste > maiorExpoenteSulLeste)
+                        maiorExpoenteSulLeste = alinhadoSulLeste;
+                    
                     if(alinhadoSulLeste == 5)
                         return true;
                 }else{
@@ -348,6 +359,10 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoSulOeste++;
+                    
+                    if(alinhadoSulOeste > maiorExpoenteSulOeste)
+                        maiorExpoenteSulOeste = alinhadoSulOeste;
+                    
                     if(alinhadoSulOeste == 5)
                         return true;
                 }else{
@@ -357,6 +372,82 @@ public class Tabuleiro {
             }
 
             deslocamento--;
+        
+        }
+        
+        // Agora que ele varreu todas as areas em torno da peca colocada num formato de estrela e verificou o 
+        // maior numero de peças alinhadas em uma direção, devemos multiplicar a pontuacao daquela linha pelo expoente encontrado
+        // Em teoria, o maior numero de pecas alinhadas Norte deve ser igual ao Sul
+        
+        deslocamento = 0;
+           
+        while (deslocamento < dimensao) {
+            
+           //Oeste
+            try {
+                
+                tabuleiro.aplicarExponente(linha, coluna - deslocamento, player, maiorExpoenteOeste);
+                
+            } catch (Exception e) {
+            }
+
+            //Leste
+            try {
+                
+                    tabuleiro.aplicarExponente(linha, coluna + deslocamento, player, maiorExpoenteLeste);
+                
+            } catch (Exception e) {
+            }
+
+            //Norte
+            try {
+                
+                    tabuleiro.aplicarExponente(linha - deslocamento, coluna, player, maiorExpoenteNorte);
+
+            } catch (Exception e) {
+            }
+
+            //Sul
+            try {
+
+                    tabuleiro.aplicarExponente(linha + deslocamento, coluna, player, maiorExpoenteSul);
+
+            } catch (Exception e) {
+            }
+
+            //Norte - Oeste
+            try {
+
+                    tabuleiro.aplicarExponente(linha - deslocamento, coluna - deslocamento, player, maiorExpoenteNorteOeste);
+
+            } catch (Exception e) {
+            }
+
+            //Norte - Leste
+            try {
+
+                    tabuleiro.aplicarExponente(linha - deslocamento, coluna + deslocamento, player, maiorExpoenteNorteLeste);
+
+            } catch (Exception e) {
+            }
+
+            //Sul - Lestex
+            try {
+
+                    tabuleiro.aplicarExponente(linha + deslocamento, coluna + deslocamento, player, maiorExpoenteSulLeste);
+
+            } catch (Exception e) {
+            }
+
+            //Sul - Oeste
+            try {
+                    tabuleiro.aplicarExponente(linha + deslocamento, coluna - deslocamento, player, maiorExpoenteSulOeste);
+
+            } catch (Exception e) {
+            }
+
+            deslocamento++;
+            
         
         }
         
@@ -375,6 +466,21 @@ public class Tabuleiro {
             tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;
         }
     }
+    
+    // Verifica qual o jogador e coloca o expoente para pecas alinhadas
+    // Método necessário para verificarVitoria
+    public void aplicarExponente(int linha, int coluna, Jogador player, int expoente){
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
+
+        if (player.identificador == EnumTabuleiro.IA) {
+            if(tabuleiro.tabuleiroExpoenteIA[linha][coluna] <= expoente)
+                tabuleiro.tabuleiroExpoenteIA[linha][coluna] = expoente;
+        } else {
+            if(tabuleiro.tabuleiroExpoenteJogador[linha][coluna] <= expoente)
+                tabuleiro.tabuleiroExpoenteJogador[linha][coluna] = expoente;
+        }
+    }
 
 //    int[0] = linha; int[1] = coluna;
     //Este método visa buscar a coordenada da casa com maior pontuação a se jogar.
@@ -384,8 +490,8 @@ public class Tabuleiro {
         
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
-                if (board.tabuleiroAmeacaIA[i][j] > maiorValor) {
-                    maiorValor = board.tabuleiroAmeacaIA[i][j];
+                if (Math.pow(board.tabuleiroAmeacaIA[i][j], board.tabuleiroExpoenteIA[i][j]) > maiorValor) {
+                    maiorValor = Math.pow(board.tabuleiroAmeacaIA[i][j], board.tabuleiroExpoenteIA[i][j]);
                     coord[0] = i;
                     coord[1] = j;
                 }
@@ -402,8 +508,8 @@ public class Tabuleiro {
         
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
-                if (board.tabuleiroAmeacaJogador[i][j] > maiorValor) {
-                    maiorValor = board.tabuleiroAmeacaIA[i][j];
+                if (Math.pow(board.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteJogador[i][j]) > maiorValor) {
+                    maiorValor = Math.pow(board.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteJogador[i][j]);
                     coord[0] = i;
                     coord[1] = j;
                 }
@@ -418,9 +524,9 @@ public class Tabuleiro {
         double soma = 0;
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
 
-        for (int li = 0; li < 14; li++) {
-            for (int co = 0; co < 14; co++) {
-                soma += tabuleiro.tabuleiroAmeacaIA[li][co] - tabuleiro.tabuleiroAmeacaJogador[li][co];
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 14; j++) {
+                soma += Math.pow(tabuleiro.tabuleiroAmeacaJogador[i][j], tabuleiroExpoenteJogador[i][j]) - Math.pow(tabuleiro.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteIA[i][j]);
             }
         }
         return soma;
