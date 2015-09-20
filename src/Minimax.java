@@ -57,7 +57,7 @@ public class Minimax {
                     melhorColuna = melhorJogada[1];
                     return new double[] {pontuacao, melhorLinha, melhorColuna};
                 } else{
-                    int[] melhorJogada = board.getCoordMaiorValorIA(board);
+                    int[] melhorJogada = board.getCoordMaiorValorJOGADOR(board);
                     melhorLinha = melhorJogada[0];
                     melhorColuna = melhorJogada[1];
                     return new double[] {pontuacao, melhorLinha, melhorColuna};
