@@ -52,12 +52,14 @@ public class Minimax {
             } else { //Se nao for a primeira jogada entao calcula-se a funcao de utilidade e entao busca-se e retorna a coord da melhor posicao a se jogar
                 pontuacao = board.getSomaAmeaca();
                 if (player.equals(EnumTabuleiro.IA)) {
-                    melhorLinha = board.getCoordMaiorValorIA(board)[0];
-                    melhorColuna = board.getCoordMaiorValorIA(board)[1];
+                    int[] melhorJogada = board.getCoordMaiorValorIA(board);
+                    melhorLinha = melhorJogada[0];
+                    melhorColuna = melhorJogada[1];
                     return new double[] {pontuacao, melhorLinha, melhorColuna};
                 } else{
-                    melhorLinha = board.getCoordMaiorValorJOGADOR(board)[0];
-                    melhorColuna = board.getCoordMaiorValorJOGADOR(board)[1];
+                    int[] melhorJogada = board.getCoordMaiorValorIA(board);
+                    melhorLinha = melhorJogada[0];
+                    melhorColuna = melhorJogada[1];
                     return new double[] {pontuacao, melhorLinha, melhorColuna};
                 }
             }

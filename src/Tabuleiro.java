@@ -92,7 +92,7 @@ public class Tabuleiro {
         char pecaInimigo = (player.getPeca() == 'x') ? 'o' : 'x';
 
         int deslocamento = 1;
-        int pontuacaoLocal = 7;
+        int pontuacaoLocal = 5;
 
         // Se uma peça estiver bloqueando, a pontuacao nao se perpetua mais
         boolean caminhoLivreNorte = true;
@@ -121,110 +121,117 @@ public class Tabuleiro {
 
             //Oeste
             try {
-                System.out.println(tabuleiro.tabuleiroPecas[linha][coluna - deslocamento]);
-                if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna - deslocamento] = pontuacaoLocal; 
-                    caminhoLivreOeste = false;
-                }
-
-                if (caminhoLivreOeste) {
+//                if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna - deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreOeste = false;
+//                }
+//
+//                if (caminhoLivreOeste) {
+                if(tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha, coluna - deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Leste
             try {
-                if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna + deslocamento] = pontuacaoLocal; 
-                    caminhoLivreLeste = false;
-                }
-
-                if (caminhoLivreLeste) {
+//                if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna + deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreLeste = false;
+//                }
+//
+//                if (caminhoLivreLeste) {
+                if(tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha, coluna + deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Norte
             try {
-                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna] = pontuacaoLocal; 
-                    caminhoLivreNorte = false;
-                }
-
-                if (caminhoLivreNorte) {
+//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna] = pontuacaoLocal; 
+//                    caminhoLivreNorte = false;
+//                }
+//
+//                if (caminhoLivreNorte) {
+                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Sul
             try {
-                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna] = pontuacaoLocal; 
-                    caminhoLivreSul = false;
-                }
-
-                if (caminhoLivreSul) {
+//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna] = pontuacaoLocal; 
+//                    caminhoLivreSul = false;
+//                }
+//
+//                if (caminhoLivreSul) {
+                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Norte - Oeste
             try {
-                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna - deslocamento] = pontuacaoLocal; 
-                    caminhoLivreNorteOeste = false;
-                }
-
-                if (caminhoLivreNorteOeste) {
+//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna - deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreNorteOeste = false;
+//                }
+//
+//                if (caminhoLivreNorteOeste) {
+                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Norte - Leste
             try {
-                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna + deslocamento] = pontuacaoLocal; 
-                    caminhoLivreNorteLeste = false;
-                }
-
-                if (caminhoLivreNorteLeste) {
+//                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna + deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreNorteLeste = false;
+//                }
+//
+//                if (caminhoLivreNorteLeste) {
+                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Sul - Lestex
             try {
-                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna + deslocamento] = pontuacaoLocal; 
-                    caminhoLivreSulLeste = false;
-                }
-
-                if (caminhoLivreSulLeste) {
+//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna + deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreSulLeste = false;
+////                }
+//
+//                if (caminhoLivreSulLeste) {
+                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
             //Sul - Oeste
             try {
-                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaInimigo) {
-                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna - deslocamento] = pontuacaoLocal; 
-                    caminhoLivreSulOeste = false;
-                }
-
-                if (caminhoLivreSulOeste) {
+//                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaInimigo) {
+//                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna - deslocamento] = pontuacaoLocal; 
+//                    caminhoLivreSulOeste = false;
+//                }
+//
+//                if (caminhoLivreSulOeste) {
+                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == '.')
                     tabuleiro.adicionarAmeaca(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
-                }
+//                }
             } catch (Exception e) {
             }
 
-            pontuacaoLocal--;
+            
             deslocamento++;
         }
         
@@ -237,8 +244,9 @@ public class Tabuleiro {
         
         //Peça do inimigo
         char pecaAliada = player.getPeca();
+        char pecaInimiga = (player.getPeca() == 'x') ? 'o' : 'x';
         
-        int deslocamento = 1;
+        int deslocamento = 5;
         
         int alinhadoOeste = 0;
         int alinhadoLeste = 0;
@@ -250,96 +258,108 @@ public class Tabuleiro {
         int alinhadoSulOeste = 0;
         int alinhadoSulLeste = 0;
         
-        while (deslocamento <= 4) {
+        while (deslocamento >= -5) {
             
-            //Oeste
+            //Oeste->Leste
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaAliada) {
                     alinhadoOeste++;
+                    if(alinhadoOeste == 5)
+                        return true;
                 }else{
                     alinhadoOeste=0;
                 }
             } catch (Exception e) {
             }
 
-            //Leste
+            //Leste->Oeste
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaAliada) {
                     alinhadoLeste++;
+                    if(alinhadoLeste == 5)
+                        return true;
                 }else{
                     alinhadoLeste=0;
                 }
             } catch (Exception e) {
             }
 
-            //Norte
+            //Norte->Sul
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaAliada) {
                     alinhadoNorte++;
+                    if(alinhadoNorte == 5)
+                        return true;
                 }else{
                     alinhadoNorte=0;
                 }
             } catch (Exception e) {
             }
 
-            //Sul
+            //Sul->Norte
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaAliada) {
                     alinhadoSul++;
+                    if(alinhadoSul == 5)
+                        return true;
                 }else{
                     alinhadoSul=0;
                 }
             } catch (Exception e) {
             }
 
-            //Norte - Oeste
+            //Norte - Oeste -> Sul - Leste
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoNorteOeste++;
+                    if(alinhadoNorteOeste == 5)
+                        return true;
                 }else{
                     alinhadoNorteOeste=0;
                 }
             } catch (Exception e) {
             }
 
-            //Norte - Leste
+            //Norte - Leste -> Sul - Oeste
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoNorteLeste++;
+                    if(alinhadoNorteLeste == 5)
+                        return true;
                 }else{
                     alinhadoNorteLeste=0;
                 }
             } catch (Exception e) {
             }
 
-            //Sul - Lestex
+            //Sul - Lestex -> Norte - Oeste
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoSulLeste++;
+                    if(alinhadoSulLeste == 5)
+                        return true;
                 }else{
                     alinhadoSulLeste=0;
                 }
             } catch (Exception e) {
             }
 
-            //Sul - Oeste
+            //Sul - Oeste -> Norte - Leste
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoSulOeste++;
+                    if(alinhadoSulOeste == 5)
+                        return true;
                 }else{
                     alinhadoSulOeste=0;
                 }
             } catch (Exception e) {
             }
 
-            deslocamento++;
+            deslocamento--;
         
         }
         
-        if(alinhadoNorte == 4 || alinhadoSul == 4 || alinhadoLeste == 4 || alinhadoOeste == 4 ||
-                alinhadoNorteLeste == 4 || alinhadoNorteOeste == 4 || alinhadoSulLeste == 4 || alinhadoSulOeste == 4){
-            return true;
-        }
         return false;     
     }
 
