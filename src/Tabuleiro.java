@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 public class Tabuleiro {
@@ -8,22 +9,19 @@ public class Tabuleiro {
     public char[][] tabuleiroPecas;
     public double[][] tabuleiroAmeacaJogador;
     public double[][] tabuleiroAmeacaIA;
-    
     public double[][] tabuleiroExpoenteJogador;
     public double[][] tabuleiroExpoenteIA;
-    
     public final int dimensao = 15;
-    
-    
+
     /*
-        Construtor privado de classe necessário para a implementação correta de um singleton.
-    */
+    Construtor privado de classe necessário para a implementação correta de um singleton.
+     */
     private Tabuleiro() {
         this.primeiraJogada = true;
         this.tabuleiroPecas = new char[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaJogador = new double[this.dimensao][this.dimensao];
         this.tabuleiroAmeacaIA = new double[this.dimensao][this.dimensao];
-        
+
         this.tabuleiroExpoenteJogador = new double[this.dimensao][this.dimensao];
         this.tabuleiroExpoenteIA = new double[this.dimensao][this.dimensao];
 
@@ -33,7 +31,7 @@ public class Tabuleiro {
                 this.tabuleiroPecas[li][co] = '.';
                 this.tabuleiroAmeacaJogador[li][co] = 0;
                 this.tabuleiroAmeacaIA[li][co] = 0;
-                
+
                 this.tabuleiroExpoenteJogador[li][co] = 1;
                 this.tabuleiroExpoenteIA[li][co] = 1;
             }
@@ -42,7 +40,7 @@ public class Tabuleiro {
 
     /*
     Singleton: em todo o programa só existe uma única classe tabuleiro, se ela não existir cria-se uma nova, se já existir retorna a existente.
-    */
+     */
     public static Tabuleiro getInstance() {
         if (instance == null) {
             instance = new Tabuleiro();
@@ -61,11 +59,17 @@ public class Tabuleiro {
 
     public void printTabuleiroAmeaca() {
         //Singleton
-        Tabuleiro tabuleiro = Tabuleiro.getInstance();       
-        
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
+
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
-                System.out.print(Math.pow(tabuleiro.tabuleiroAmeacaJogador[i][j], tabuleiroExpoenteJogador[i][j]) - Math.pow(tabuleiro.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteIA[i][j]) + " ");
+                if (tabuleiro.tabuleiroPecas[i][j] == '.') {
+                    System.out.print(Math.pow(tabuleiro.tabuleiroAmeacaJogador[i][j], tabuleiroExpoenteJogador[i][j]) - Math.pow(tabuleiro.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteIA[i][j]) + " ");
+                } else if (tabuleiro.tabuleiroPecas[i][j] == 'x') {
+                    System.out.print("XXX ");
+                } else {
+                    System.out.print("OOO ");
+                }
             }
             System.out.print("\n");
         }
@@ -75,7 +79,7 @@ public class Tabuleiro {
     public boolean inserePeca(int linha, int coluna, Jogador player) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
-        
+
         if (tabuleiro.existePeca(linha, coluna)) {
             System.out.println("\n-> Ja existe uma peca nesta posicao!");
             return false;
@@ -85,19 +89,19 @@ public class Tabuleiro {
         } else {
             tabuleiro.tabuleiroPecas[linha][coluna] = 'o';
         }
-        
+
         this.primeiraJogada = false;
         this.setAmeaca(linha, coluna, player);
         this.printTabuleiroAmeaca();
         System.out.println("Peça Inserida em: " + linha + " " + coluna);
-        
+
         return true;
     }
-    
-    public boolean primeiraJogada(){
+
+    public boolean primeiraJogada() {
         return this.primeiraJogada;
     }
-    
+
     public void setAmeaca(int linha, int coluna, Jogador player) {
 
         //Singleton
@@ -119,142 +123,289 @@ public class Tabuleiro {
         boolean caminhoLivreNorteOeste = true;
         boolean caminhoLivreSulLeste = true;
         boolean caminhoLivreSulOeste = true;
-        
+
 
         //Zera o local da peça colocada
         this.tabuleiroAmeacaJogador[linha][coluna] = 0;
         this.tabuleiroAmeacaIA[linha][coluna] = 0;
 
-        
+
         //Num raio de 7 casas a partir do ponto onde a peca foi inserida, a ameaca é gerada no formato de "estrela" como foi mostrado no relatório.
-        //@TODO Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção representadas pelas oito varíaveis "caminhoLivreX".
-        //@TODO Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+        //Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção representadas pelas oito varíaveis "caminhoLivreX".
+        //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
         while (deslocamento <= 7) {
 
             //Oeste
             try {
-                if(tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha, coluna - deslocamento, player, pontuacaoLocal);
+                if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna - deslocamento] = pontuacaoLocal; 
+                    caminhoLivreOeste = false;
+
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha, coluna + deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+                //Ao tentar adicionar uma ameaça se a peça encontra uma peça inimiga no caminho toda a ameaça é bloquada naquela direção
+                if (caminhoLivreOeste) {
+                    if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha, coluna - deslocamento, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Leste
             try {
-                if(tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha, coluna + deslocamento, player, pontuacaoLocal);
-                
+                if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha][coluna + deslocamento] = pontuacaoLocal; 
+                    caminhoLivreLeste = false;
+
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha, coluna - deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreLeste) {
+                    if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha, coluna + deslocamento, player, pontuacaoLocal);
+                    }
+                }
+
             } catch (Exception e) {
             }
 
             //Norte
             try {
-                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == '.')
-                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna, player, pontuacaoLocal);
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna] = pontuacaoLocal; 
+                    caminhoLivreNorte = false;
+
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha + deslocamentoReverso][coluna] == '.') {
+                                tabuleiro.removerAmeaca(linha + deslocamentoReverso, coluna, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreNorte) {
+                    if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == '.') {
+                        tabuleiro.adicionarAmeaca(linha - deslocamento, coluna, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Sul
             try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna] = pontuacaoLocal; 
+                    caminhoLivreSul = false;
 
-                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == '.')
-                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna, player, pontuacaoLocal);
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha - deslocamentoReverso][coluna] == '.') {
+                                tabuleiro.removerAmeaca(linha - deslocamentoReverso, coluna, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreSul) {
+
+                    if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == '.') {
+                        tabuleiro.adicionarAmeaca(linha + deslocamento, coluna, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Norte - Oeste
             try {
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna - deslocamento] = pontuacaoLocal; 
+                    caminhoLivreNorteOeste = false;
 
-                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha + deslocamentoReverso][coluna + deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha + deslocamentoReverso, coluna + deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreNorteOeste) {
+
+                    if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha - deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Norte - Leste
             try {
+                if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha - deslocamento][coluna + deslocamento] = pontuacaoLocal; 
+                    caminhoLivreNorteLeste = false;
 
-                if(tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha + deslocamentoReverso][coluna - deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha + deslocamentoReverso, coluna - deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreNorteLeste) {
+
+                    if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha - deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Sul - Lestex
             try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna + deslocamento] = pontuacaoLocal; 
+                    caminhoLivreSulLeste = false;
 
-                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha - deslocamentoReverso][coluna - deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha - deslocamentoReverso, coluna - deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreSulLeste) {
+
+                    if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha + deslocamento, coluna + deslocamento, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             //Sul - Oeste
             try {
+                if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaInimigo) {
+                    //@TODO pecasInimigasEncontradas[bloqueios][linha + deslocamento][coluna - deslocamento] = pontuacaoLocal; 
+                    caminhoLivreSulOeste = false;
 
-                if(tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == '.')
-                    tabuleiro.adicionarAmeaca(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    //Ao encontrar uma peça inimiga, a ameaça gerada por aquela pela peça também deve ser bloqueada pela nova peça adicional (X bloqueia Y, Y bloqueia X).
+                    for (int deslocamentoReverso = deslocamento; deslocamentoReverso <= 7 - deslocamento; deslocamentoReverso++) {
+                        try {
+                            if (tabuleiro.tabuleiroPecas[linha - deslocamentoReverso][coluna + deslocamentoReverso] == '.') {
+                                tabuleiro.removerAmeaca(linha - deslocamentoReverso, coluna + deslocamentoReverso, player, getPontuacaoReversa(pontuacaoLocal - deslocamentoReverso));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                if (caminhoLivreSulOeste) {
+
+                    if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == '.') {
+                        tabuleiro.adicionarAmeaca(linha + deslocamento, coluna - deslocamento, player, pontuacaoLocal);
+                    }
+                }
 
             } catch (Exception e) {
             }
 
             pontuacaoLocal--;
-            if(pontuacaoLocal < 7)
+            if (pontuacaoLocal < 7) {
                 pontuacaoLocal = 1;
+            }
             deslocamento++;
         }
-        
-        
+        return;
+
     }
-    
-    public boolean verificarVitoria(int linha, int coluna, Jogador player){
+
+    public boolean verificarVitoria(int linha, int coluna, Jogador player) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
-        
+
         //Peça do inimigo
         char pecaAliada = player.getPeca();
         char pecaInimiga = player.getPecaInimigo();
-        
+
         int deslocamento = 5;
-        
+
         int alinhadoOeste = 0;
         int alinhadoLeste = 0;
         int alinhadoNorte = 0;
         int alinhadoSul = 0;
-        
+
         int alinhadoNorteOeste = 0;
         int alinhadoNorteLeste = 0;
         int alinhadoSulOeste = 0;
         int alinhadoSulLeste = 0;
-        
+
         int maiorExpoenteOeste = 0;
         int maiorExpoenteLeste = 0;
         int maiorExpoenteNorte = 0;
         int maiorExpoenteSul = 0;
-        
+
         int maiorExpoenteNorteOeste = 0;
         int maiorExpoenteNorteLeste = 0;
         int maiorExpoenteSulOeste = 0;
         int maiorExpoenteSulLeste = 0;
-        
+
         while (deslocamento >= -5) {
-            
+
             //Oeste->Leste
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna - deslocamento] == pecaAliada) {
                     alinhadoOeste++;
-                    
+
                     //Ao encontrar peças alinhadas, toda aquela fila deverá ter um expoente
-                    if(alinhadoOeste > maiorExpoenteOeste)
+                    if (alinhadoOeste > maiorExpoenteOeste) {
                         maiorExpoenteOeste = alinhadoOeste;
-                    
+                    }
+
                     //Se tem 5 alinhado, vitoria!
-                    if(alinhadoOeste == 5)
+                    if (alinhadoOeste == 5) {
                         return true;
-                }else{
-                    alinhadoOeste=0;
+                    }
+                } else {
+                    alinhadoOeste = 0;
                 }
             } catch (Exception e) {
             }
@@ -263,14 +414,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha][coluna + deslocamento] == pecaAliada) {
                     alinhadoLeste++;
-                    
-                    if(alinhadoLeste > maiorExpoenteLeste)
+
+                    if (alinhadoLeste > maiorExpoenteLeste) {
                         maiorExpoenteLeste = alinhadoLeste;
-                    
-                    if(alinhadoLeste == 5)
+                    }
+
+                    if (alinhadoLeste == 5) {
                         return true;
-                }else{
-                    alinhadoLeste=0;
+                    }
+                } else {
+                    alinhadoLeste = 0;
                 }
             } catch (Exception e) {
             }
@@ -279,14 +432,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna] == pecaAliada) {
                     alinhadoNorte++;
-                    
-                    if(alinhadoNorte > maiorExpoenteNorte)
+
+                    if (alinhadoNorte > maiorExpoenteNorte) {
                         maiorExpoenteNorte = alinhadoNorte;
-                    
-                    if(alinhadoNorte == 5)
+                    }
+
+                    if (alinhadoNorte == 5) {
                         return true;
-                }else{
-                    alinhadoNorte=0;
+                    }
+                } else {
+                    alinhadoNorte = 0;
                 }
             } catch (Exception e) {
             }
@@ -295,14 +450,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna] == pecaAliada) {
                     alinhadoSul++;
-                    
-                    if(alinhadoSul > maiorExpoenteSul)
+
+                    if (alinhadoSul > maiorExpoenteSul) {
                         maiorExpoenteSul = alinhadoSul;
-                    
-                    if(alinhadoSul == 5)
+                    }
+
+                    if (alinhadoSul == 5) {
                         return true;
-                }else{
-                    alinhadoSul=0;
+                    }
+                } else {
+                    alinhadoSul = 0;
                 }
             } catch (Exception e) {
             }
@@ -311,14 +468,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoNorteOeste++;
-                    
-                    if(alinhadoNorteOeste > maiorExpoenteNorteOeste)
+
+                    if (alinhadoNorteOeste > maiorExpoenteNorteOeste) {
                         maiorExpoenteNorteOeste = alinhadoNorteOeste;
-                    
-                    if(alinhadoNorteOeste == 5)
+                    }
+
+                    if (alinhadoNorteOeste == 5) {
                         return true;
-                }else{
-                    alinhadoNorteOeste=0;
+                    }
+                } else {
+                    alinhadoNorteOeste = 0;
                 }
             } catch (Exception e) {
             }
@@ -327,14 +486,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha - deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoNorteLeste++;
-                    
-                    if(alinhadoNorteLeste > maiorExpoenteNorteLeste)
+
+                    if (alinhadoNorteLeste > maiorExpoenteNorteLeste) {
                         maiorExpoenteNorteLeste = alinhadoNorteLeste;
-                    
-                    if(alinhadoNorteLeste == 5)
+                    }
+
+                    if (alinhadoNorteLeste == 5) {
                         return true;
-                }else{
-                    alinhadoNorteLeste=0;
+                    }
+                } else {
+                    alinhadoNorteLeste = 0;
                 }
             } catch (Exception e) {
             }
@@ -343,14 +504,16 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna + deslocamento] == pecaAliada) {
                     alinhadoSulLeste++;
-                    
-                    if(alinhadoSulLeste > maiorExpoenteSulLeste)
+
+                    if (alinhadoSulLeste > maiorExpoenteSulLeste) {
                         maiorExpoenteSulLeste = alinhadoSulLeste;
-                    
-                    if(alinhadoSulLeste == 5)
+                    }
+
+                    if (alinhadoSulLeste == 5) {
                         return true;
-                }else{
-                    alinhadoSulLeste=0;
+                    }
+                } else {
+                    alinhadoSulLeste = 0;
                 }
             } catch (Exception e) {
             }
@@ -359,50 +522,52 @@ public class Tabuleiro {
             try {
                 if (tabuleiro.tabuleiroPecas[linha + deslocamento][coluna - deslocamento] == pecaAliada) {
                     alinhadoSulOeste++;
-                    
-                    if(alinhadoSulOeste > maiorExpoenteSulOeste)
+
+                    if (alinhadoSulOeste > maiorExpoenteSulOeste) {
                         maiorExpoenteSulOeste = alinhadoSulOeste;
-                    
-                    if(alinhadoSulOeste == 5)
+                    }
+
+                    if (alinhadoSulOeste == 5) {
                         return true;
-                }else{
-                    alinhadoSulOeste=0;
+                    }
+                } else {
+                    alinhadoSulOeste = 0;
                 }
             } catch (Exception e) {
             }
 
             deslocamento--;
-        
+
         }
-        
+
         // Agora que ele varreu todas as areas em torno da peca colocada num formato de estrela e verificou o 
         // maior numero de peças alinhadas em uma direção, devemos multiplicar a pontuacao daquela linha pelo expoente encontrado
         // Em teoria, o maior numero de pecas alinhadas Norte deve ser igual ao Sul
-        
+
         deslocamento = 0;
-           
+
         while (deslocamento < dimensao) {
-            
-           //Oeste
+
+            //Oeste
             try {
-                
+
                 tabuleiro.aplicarExponente(linha, coluna - deslocamento, player, maiorExpoenteOeste);
-                
+
             } catch (Exception e) {
             }
 
             //Leste
             try {
-                
-                    tabuleiro.aplicarExponente(linha, coluna + deslocamento, player, maiorExpoenteLeste);
-                
+
+                tabuleiro.aplicarExponente(linha, coluna + deslocamento, player, maiorExpoenteLeste);
+
             } catch (Exception e) {
             }
 
             //Norte
             try {
-                
-                    tabuleiro.aplicarExponente(linha - deslocamento, coluna, player, maiorExpoenteNorte);
+
+                tabuleiro.aplicarExponente(linha - deslocamento, coluna, player, maiorExpoenteNorte);
 
             } catch (Exception e) {
             }
@@ -410,7 +575,7 @@ public class Tabuleiro {
             //Sul
             try {
 
-                    tabuleiro.aplicarExponente(linha + deslocamento, coluna, player, maiorExpoenteSul);
+                tabuleiro.aplicarExponente(linha + deslocamento, coluna, player, maiorExpoenteSul);
 
             } catch (Exception e) {
             }
@@ -418,7 +583,7 @@ public class Tabuleiro {
             //Norte - Oeste
             try {
 
-                    tabuleiro.aplicarExponente(linha - deslocamento, coluna - deslocamento, player, maiorExpoenteNorteOeste);
+                tabuleiro.aplicarExponente(linha - deslocamento, coluna - deslocamento, player, maiorExpoenteNorteOeste);
 
             } catch (Exception e) {
             }
@@ -426,7 +591,7 @@ public class Tabuleiro {
             //Norte - Leste
             try {
 
-                    tabuleiro.aplicarExponente(linha - deslocamento, coluna + deslocamento, player, maiorExpoenteNorteLeste);
+                tabuleiro.aplicarExponente(linha - deslocamento, coluna + deslocamento, player, maiorExpoenteNorteLeste);
 
             } catch (Exception e) {
             }
@@ -434,24 +599,24 @@ public class Tabuleiro {
             //Sul - Lestex
             try {
 
-                    tabuleiro.aplicarExponente(linha + deslocamento, coluna + deslocamento, player, maiorExpoenteSulLeste);
+                tabuleiro.aplicarExponente(linha + deslocamento, coluna + deslocamento, player, maiorExpoenteSulLeste);
 
             } catch (Exception e) {
             }
 
             //Sul - Oeste
             try {
-                    tabuleiro.aplicarExponente(linha + deslocamento, coluna - deslocamento, player, maiorExpoenteSulOeste);
+                tabuleiro.aplicarExponente(linha + deslocamento, coluna - deslocamento, player, maiorExpoenteSulOeste);
 
             } catch (Exception e) {
             }
 
             deslocamento++;
-            
-        
+
+
         }
-        
-        return false;     
+
+        return false;
     }
 
     // Verifica qual o jogador e coloca a ameaca no seu respectivo tabuleiro
@@ -466,28 +631,44 @@ public class Tabuleiro {
             tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] + valor;
         }
     }
-    
+
+    // Ao encontrar uma peça inimiga no meio do caminho deve-se remover todas as ameçaas que aquela peça gerava alem da minha posicao
+    // Exemplo 2 3 4 X 4 3 2    --JOGADA-->>> -3 -4 O X 4 3 2
+    // Método necessário para setAmeaca
+    public void removerAmeaca(int linha, int coluna, Jogador player, double valor) {
+        //Singleton
+        Tabuleiro tabuleiro = Tabuleiro.getInstance();
+
+        if (player.identificador == EnumTabuleiro.JOGADOR) {
+            tabuleiro.tabuleiroAmeacaIA[linha][coluna] = tabuleiro.tabuleiroAmeacaIA[linha][coluna] - valor;
+        } else {
+            tabuleiro.tabuleiroAmeacaJogador[linha][coluna] = tabuleiro.tabuleiroAmeacaJogador[linha][coluna] - valor;
+        }
+    }
+
     // Verifica qual o jogador e coloca o expoente para pecas alinhadas
     // Método necessário para verificarVitoria
-    public void aplicarExponente(int linha, int coluna, Jogador player, int expoente){
+    public void aplicarExponente(int linha, int coluna, Jogador player, int expoente) {
         //Singleton
         Tabuleiro tabuleiro = Tabuleiro.getInstance();
 
         if (player.identificador == EnumTabuleiro.IA) {
-            if(tabuleiro.tabuleiroExpoenteIA[linha][coluna] <= expoente)
+            if (tabuleiro.tabuleiroExpoenteIA[linha][coluna] <= expoente) {
                 tabuleiro.tabuleiroExpoenteIA[linha][coluna] = expoente;
+            }
         } else {
-            if(tabuleiro.tabuleiroExpoenteJogador[linha][coluna] <= expoente)
+            if (tabuleiro.tabuleiroExpoenteJogador[linha][coluna] <= expoente) {
                 tabuleiro.tabuleiroExpoenteJogador[linha][coluna] = expoente;
+            }
         }
     }
 
 //    int[0] = linha; int[1] = coluna;
-    //Este método visa buscar a coordenada da casa com maior pontuação a se jogar.
-    public int[] getCoordMaiorValorIA(Tabuleiro board){
+    //Este método visa buscar a coordenada da casa com maior pontuação a se jogar, de acordo com a pontuacao total do tabuleiro
+    public int[] getCoordMaiorValorIA(Tabuleiro board) {
         double maiorValor = 0;
         int[] coord = {99, 99};
-        
+
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
                 if (Math.pow(board.tabuleiroAmeacaIA[i][j], board.tabuleiroExpoenteIA[i][j]) > maiorValor) {
@@ -497,15 +678,15 @@ public class Tabuleiro {
                 }
             }
         }
-        
+
         return coord;
     }
-    
+
     //Este método visa buscar a coordenada da casa com maior pontuação a se jogar.
-    public int[] getCoordMaiorValorJOGADOR(Tabuleiro board){
+    public int[] getCoordMaiorValorJOGADOR(Tabuleiro board) {
         double maiorValor = 0;
         int[] coord = {99, 99};
-        
+
         for (int i = 0; i < this.dimensao; i++) {
             for (int j = 0; j < this.dimensao; j++) {
                 if (Math.pow(board.tabuleiroAmeacaIA[i][j], tabuleiroExpoenteJogador[i][j]) > maiorValor) {
@@ -515,7 +696,7 @@ public class Tabuleiro {
                 }
             }
         }
-        
+
         return coord;
     }
 
@@ -537,6 +718,20 @@ public class Tabuleiro {
     public boolean existePeca(int li, int co) {
         return this.tabuleiroPecas[li][co] != '.';
     }
-    
-    
+
+    public double getPontuacaoReversa(double pontuacaoLocal) {
+        switch ((int) pontuacaoLocal) {
+            case 10:
+                return 10;
+            case 9:
+                return 9;
+            case 8:
+                return 8;
+            case 7:
+                return 7;
+            case 1:
+                return 1;
+        }
+        return 1;
+    }
 }
